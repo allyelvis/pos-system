@@ -7,21 +7,19 @@ const io = require('socket.io')(http);
 app.use(cors());
 app.use(express.json());
 
-let products = [
-  { id: 1, name: 'Product 1' },
-  { id: 2, name: 'Product 2' },
-  // Add more products as needed
-];
-
+// Replace with your actual implementation for fetching products
 app.get('/api/products', (req, res) => {
+  const products = []; // Fetch product data from EBMS Burundi
   res.json(products);
 });
 
+// Replace with your actual implementation for handling sales
 app.post('/api/sale', (req, res) => {
   const { productId } = req.body;
   // Update inventory and sales data in EBMS Burundi
   res.json({ message: 'Sale processed successfully' });
   // Emit product update event to all connected clients
+  const products = []; // Updated product data
   io.emit('productUpdate', products);
 });
 
