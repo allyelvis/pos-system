@@ -8,6 +8,15 @@
 			"problemMatcher": [],
 			"label": "npm: start - inventory-pos-app/frontend",
 			"detail": "react-scripts start"
+		},
+		{
+			"type": "npm",
+			"script": "install",
+			"path": "inventory-pos-app/frontend",
+			"group": "clean",
+			"problemMatcher": [],
+			"label": "npm: install - inventory-pos-app/frontend",
+			"detail": "install dependencies from package"
 		}
 	]
 }
