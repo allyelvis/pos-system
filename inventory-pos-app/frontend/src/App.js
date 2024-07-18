@@ -1,23 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 
 function App() {
+  const [products, setProducts] = useState([]);
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io('http://http://127.0.0.1:3001/'); // Replace with your backend URL
+    setSocket(newSocket);
+
+    newSocket.on('productUpdate', (updatedProducts) => {
+      setProducts(updatedProducts);
+    });
+
+    fetch('/api/products') // Replace with your backend API endpoint
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+      });
+
+    return () => newSocket.disconnect();
+  }, []);
+
+  const handleProductSale = (productId) => {
+    fetch('/api/sale', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      // Handle success or error
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>POS & Inventory System</h1>
+      <ul>
+        {products.map((product) => (
+          <li key={product.id}>
+            {product.name}
+            <button onClick={() => handleProductSale(product.id)}>Sell</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
