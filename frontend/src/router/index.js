@@ -46,3 +46,21 @@ const routes = [
   { path: '/cardealer/add', component: CarDealerAddCar },
   { path: '/cardealer/edit/:id', component: CarDealerEditCar },
 ];
+import RestaurantMenu from '../views/Restaurant/Menu.vue';
+import RestaurantOrder from '../views/Restaurant/Order.vue';
+
+const routes = [
+  { path: '/', component: Home },
+  { path: '/auth', component: Auth },
+  { path: '/restaurant/menu', component: RestaurantMenu },
+  { path: '/restaurant/order', component: RestaurantOrder },
+];
+import RoomManagement from '../views/Hotel/RoomManagement.vue';
+import ReservationManagement from '../views/Hotel/ReservationManagement.vue';
+
+const routes = [
+  { path: '/', component: Home },
+  { path: '/auth', component: Auth },
+  { path: '/hotel/rooms', component: RoomManagement },
+  { path: '/hotel/reservations', component: ReservationManagement },
+];

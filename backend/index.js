@@ -42,3 +42,15 @@ const carRoutes = require('./routes/cars/index');
 
 // Use car routes
 app.use('/api/cars', carRoutes);
+const menuRoutes = require('./routes/menu/index');
+const orderRoutes = require('./routes/orders/index');
+
+// Use restaurant routes
+app.use('/api/menu', menuRoutes);
+app.use('/api/orders', orderRoutes);
+const roomRoutes = require('./routes/rooms/index');
+const reservationRoutes = require('./routes/reservations/index');
+
+// Use hotel routes
+app.use('/api/rooms', roomRoutes);
+app.use('/api/reservations', reservationRoutes);
