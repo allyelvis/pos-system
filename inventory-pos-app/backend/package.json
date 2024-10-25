@@ -7,11 +7,20 @@
   },
   "keywords": [],
   "author": "Ally Elvis Nzeyimana",
-  "license": "ISC",
-  "description": "",
+  "license": "MIT",
+  "description": "pos inventory system",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "socket.io": "^4.7.5"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allyelvis/pos-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/allyelvis/pos-system/issues"
+  },
+  "homepage": "https://github.com/allyelvis/pos-system#readme"
 }
