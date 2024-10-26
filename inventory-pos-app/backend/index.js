@@ -1,35 +1,56 @@
 const express = require('express');
-const app = express();
+const mongoose = require('mongoose');
 const cors = require('cors');
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
+const authRoutes = require('./routes/auth');
+const app = express();
+const port = 3000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Replace with your actual implementation for fetching products
-app.get('/api/products', (req, res) => {
-  const products = []; // Fetch product data from EBMS Burundi
-  res.json(products);
+// Database connection
+mongoose.connect('mongodb://localhost:27017/aenzbi_inventory', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('Connected to MongoDB');
+}).catch(err => {
+  console.error('MongoDB connection error:', err);
 });
 
-// Replace with your actual implementation for handling sales
-app.post('/api/sale', (req, res) => {
-  const { productId } = req.body;
-  // Update inventory and sales data in EBMS Burundi
-  res.json({ message: 'Sale processed successfully' });
-  // Emit product update event to all connected clients
-  const products = []; // Updated product data
-  io.emit('productUpdate', products);
-});
+// Routes
+app.use('/api/auth', authRoutes);
 
-http.listen(3000, () => {
-  console.log('Server running on port 3000');
+// Start server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });
+const productRoutes = require('./routes/pos/products');
+const saleRoutes = require('./routes/pos/sales');
 
-io.on('connection', (socket) => {
-  console.log('A user connected');
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-  });
-});
+// Use POS routes
+app.use('/api/products', productRoutes);
+app.use('/api/sales', saleRoutes);
+const transactionRoutes = require('./routes/accounting/transactions');
+const fiscalizationRoutes = require('./routes/accounting/fiscalization');
+
+// Use accounting routes
+app.use('/api/transactions', transactionRoutes);
+app.use('/api/fiscalization', fiscalizationRoutes);
+const carRoutes = require('./routes/cars/index');
+
+// Use car routes
+app.use('/api/cars', carRoutes);
+const menuRoutes = require('./routes/menu/index');
+const orderRoutes = require('./routes/orders/index');
+
+// Use restaurant routes
+app.use('/api/menu', menuRoutes);
+app.use('/api/orders', orderRoutes);
+const roomRoutes = require('./routes/rooms/index');
+const reservationRoutes = require('./routes/reservations/index');
+
+// Use hotel routes
+app.use('/api/rooms', roomRoutes);
+app.use('/api/reservations', reservationRoutes);
