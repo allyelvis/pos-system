@@ -1,40 +1,51 @@
-# Aenzbi Inventory POS System
+# Aenzbi POS/Inventory System
 
-This is a simple inventory POS system using Vue.js for the frontend and Express.js for the backend.
+## Overview
+This project is a comprehensive POS and inventory management system designed to cater to various business needs, including retail, restaurant, car dealership, and hotel management.
 
-## Project Structure
-
-- **frontend**: Contains Vue.js application.
-- **backend**: Contains Express.js application.
+## Features
+- **Frontend**: Built with Vue.js for an interactive user interface.
+- **Backend**: Node.js and Express for server-side functionality.
+- **Real-time Data**: Integrates with various systems such as CRM, ERP, and other applications.
 
 ## Getting Started
 
-### Frontend
+### Prerequisites
+- Node.js
+- npm
+- Git
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend
+### Installation
+1. Clone the repository:
    ```
-2. Install dependencies:
-   ```bash
+   git clone https://github.com/AllyElvis/pos-system.git
+   ```
+2. Navigate to the project directory:
+   ```
+   cd pos-system/inventory-pos-app
+   ```
+3. Install dependencies for frontend and backend:
+   ```
    npm install
    ```
-3. Serve the application (using a local server):
-   ```bash
+
+### Running the Application
+1. Start the frontend:
+   ```
+   cd frontend
+   npm start
+   ```
+2. Start the backend:
+   ```
+   cd backend
    npm start
    ```
 
-### Backend
+## Documentation
+Refer to the manual in the `docs` directory for detailed procedures and usage.
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the server:
-   ```bash
-   node index.js
-   ```
+## Contributing
+Feel free to submit issues and pull requests!
+
+## License
+This project is licensed under the MIT License.
