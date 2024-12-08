@@ -19,4 +19,4 @@ The project is divided into two main parts:
 1. **Clone the repository** (or create the directory structure manually):
    ```bash
    git clone https://github.com/allyelvis/pos-system.git
-   cd inventory-pos-app
+   cd pos-system
