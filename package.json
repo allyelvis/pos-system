@@ -5,9 +5,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^5.5.0",
     "axios": "^1.7.7",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "stripe": "^17.5.0"
   },
   "name": "pos-system",
   "description": "This project is a web application for an inventory system and POS (Point of Sale) integrated with EBMS Burundi for real-time sales and inventory updates.",
@@ -23,6 +25,5 @@
   "bugs": {
     "url": "https://github.com/allyelvis/pos-system/issues"
   },
-  "homepage": "https://github.com/allyelvis/pos-system#readme",
-  "devDependencies": {}
+  "homepage": "https://github.com/allyelvis/pos-system#readme"
 }
