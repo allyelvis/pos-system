@@ -1,101 +1,155 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import { useState, useEffect } from 'react'
+import { signOut } from 'next-auth/react'
+import ProductList from '@/components/ProductList'
+import Cart from '@/components/Cart'
+import Inventory from '@/components/Inventory'
+import SalesReport from '@/components/SalesReport'
+import CustomerManagement from '@/components/CustomerManagement'
+import BarcodeScanner from '@/components/BarcodeScanner'
+import Receipt from '@/components/Receipt'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+export default function POS({ user, store }) {
+  const [products, setProducts] = useState([])
+  const [cart, setCart] = useState([])
+  const [view, setView] = useState('pos')
+  const [customers, setCustomers] = useState([])
+  const [selectedCustomer, setSelectedCustomer] = useState(null)
+  const [lastSale, setLastSale] = useState(null)
+
+  useEffect(() => {
+    fetchProducts()
+    fetchCustomers()
+  }, [])
+
+  const fetchProducts = async () => {
+    const res = await fetch(`/api/products?storeId=${store.id}`)
+    const data = await res.json()
+    setProducts(data)
+  }
+
+  const fetchCustomers = async () => {
+    const res = await fetch('/api/customers')
+    const data = await res.json()
+    setCustomers(data)
+  }
+
+  const addToCart = (product) => {
+    const existingItem = cart.find(item => item.id === product.id)
+    if (existingItem) {
+      setCart(cart.map(item =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      ))
+    } else {
+      setCart([...cart, { ...product, quantity: 1 }])
+    }
+  }
+
+  const removeFromCart = (index) => {
+    const newCart = [...cart]
+    newCart.splice(index, 1)
+    setCart(newCart)
+  }
+
+  const handleBarcodeScan = (barcode) => {
+    const product = products.find(p => p.barcode === barcode)
+    if (product) {
+      addToCart(product)
+    } else {
+      alert('Product not found')
+    }
+  }
+
+  const checkout = async () => {
+    const saleData = {
+      items: cart,
+      total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+      userId: user.id,
+      customerId: selectedCustomer ? selectedCustomer.id : null,
+      storeId: store.id,
+    }
+
+    const saleRes = await fetch('/api/sales', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(saleData),
+    })
+
+    if (saleRes.ok) {
+      const sale = await saleRes.json()
+      setLastSale(sale)
+
+      // Record sale in accounting
+      await fetch('/api/accounting', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ saleId: sale.id, total: sale.total }),
+      })
+
+      alert('Sale completed and recorded in accounting!')
+      setCart([])
+      fetchProducts()
+      setSelectedCustomer(null)
+    } else {
+      alert('Error completing sale')
+    }
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <div className="container mx-auto p-4">
+      <div className="mb-4">
+        <Button onClick={() => setView('pos')} className="mr-2">POS</Button>
+        {user.role === 'manager' && (
+          <>
+            <Button onClick={() => setView('inventory')} className="mr-2">Inventory</Button>
+            <Button onClick={() => setView('sales')} className="mr-2">Sales Report</Button>
+            <Button onClick={() => setView('customers')}>Customers</Button>
+          </>
+        )}
+        <Button onClick={() => signOut()} className="ml-4">Logout</Button>
+      </div>
+      {view === 'pos' && (
+        <div className="flex">
+          <div className="w-2/3">
+            <BarcodeScanner onScan={handleBarcodeScan} />
+            <ProductList products={products} addToCart={addToCart} />
+          </div>
+          <div className="w-1/3">
+            <div className="mb-4">
+              <select
+                value={selectedCustomer ? selectedCustomer.id : ''}
+                onChange={(e) => setSelectedCustomer(customers.find(c => c.id === e.target.value) || null)}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">Select Customer</option>
+                {customers.map(customer => (
+                  <option key={customer.id} value={customer.id}>{customer.name}</option>
+                ))}
+              </select>
+            </div>
+            <Cart 
+              cart={cart} 
+              removeFromCart={removeFromCart} 
+              checkout={checkout}
+              selectedCustomer={selectedCustomer}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {lastSale && (
+              <div className="mt-4">
+                <h3 className="text-xl font-bold mb-2">Last Sale Receipt</h3>
+                <Receipt sale={lastSale} store={store} />
+              </div>
+            )}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
+      {view === 'inventory' && user.role === 'manager' && <Inventory storeId={store.id} />}
+      {view === 'sales' && user.role === 'manager' && <SalesReport storeId={store.id} />}
+      {view === 'customers' && user.role === 'manager' && <CustomerManagement />}
     </div>
-  );
+  )
 }
