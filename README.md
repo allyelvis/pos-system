@@ -28,23 +28,27 @@ npm run dev
 npm run build
 ```
 
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
+### Run End-to-End Tests with [Nightwatch](https://nightwatchjs.org/)
 
 ```sh
-# Install browsers for the first run
-npx playwright install
-
-# When testing on CI, must build the project first
+# When using CI, the project must be built first.
 npm run build
 
 # Runs the end-to-end tests
 npm run test:e2e
-# Runs the tests only on Chromium
-npm run test:e2e -- --project=chromium
+# Runs the tests only on Chrome
+npm run test:e2e -- --env chrome
 # Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
+npm run test:e2e -- tests/e2e/example.js
 # Runs the tests in debug mode
 npm run test:e2e -- --debug
+```
+    
+### Run Headed Component Tests with [Nightwatch Component Testing](https://nightwatchjs.org/guide/component-testing/introduction.html)
+  
+```sh
+npm run test:unit
+npm run test:unit -- --headless # for headless testing
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
