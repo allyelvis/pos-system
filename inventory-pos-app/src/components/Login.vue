@@ -15,8 +15,8 @@ import apiService from '@/services/apiService';
 export default {
   data() {
     return {
-      username: '',
-      password: ''
+      username: 'aenzbi',
+      password: 'aenzbi123'
     };
   },
   methods: {
