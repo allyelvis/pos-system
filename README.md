@@ -1,22 +1,54 @@
-# Inventory POS Web App
+# pos-system
 
-This project is a web application for an inventory system and POS (Point of Sale) integrated with EBMS Burundi for real-time sales and inventory updates.
+This template should help get you started developing with Vue 3 in Vite.
 
-## Project Structure
+## Recommended IDE Setup
 
-The project is divided into two main parts:
-- **Frontend**: Built with React.
-- **Backend**: Built with Node.js and Express.js.
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-## Setup
+## Customize configuration
 
-### Prerequisites
+See [Vite Configuration Reference](https://vite.dev/config/).
 
-- Node.js and npm installed on your system. You can download them from the [Node.js website](https://nodejs.org/).
+## Project Setup
 
-### Installation
+```sh
+npm install
+```
 
-1. **Clone the repository** (or create the directory structure manually):
-   ```bash
-   git clone https://github.com/allyelvis/pos-system.git
-   cd pos-system
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Run End-to-End Tests with [Playwright](https://playwright.dev)
+
+```sh
+# Install browsers for the first run
+npx playwright install
+
+# When testing on CI, must build the project first
+npm run build
+
+# Runs the end-to-end tests
+npm run test:e2e
+# Runs the tests only on Chromium
+npm run test:e2e -- --project=chromium
+# Runs the tests of a specific file
+npm run test:e2e -- tests/example.spec.ts
+# Runs the tests in debug mode
+npm run test:e2e -- --debug
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
+```

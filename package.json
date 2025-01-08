@@ -1,7 +1,7 @@
 {
   "name": "pos-system",
-  "version": "1.1.0",
-  "description": "This project is a web application for an inventory system and POS (Point of Sale) integrated with EBMS Burundi for real-time sales and inventory updates.",
+  "version": "1.3.0",
+  "description": "Web application for inventory and POS integrated with EBMS Burundi.",
   "main": "vite.config.js",
   "scripts": {
     "dev": "vite",
@@ -9,27 +9,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^5.5.0",
-    "@vitejs/plugin-react": "^4.3.4",
-    "axios": "^1.7.7",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "stripe": "^17.5.0",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "axios": "^1.7.7",
+    "@stripe/stripe-js": "^5.5.0",
+    "stripe": "^17.5.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/allyelvis/pos-system.git"
-  },
-  "keywords": [],
   "author": "Ally Elvis Nzeyimana",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allyelvis/pos-system.git"
+  },
   "bugs": {
     "url": "https://github.com/allyelvis/pos-system/issues"
   },
-  "homepage": "https://github.com/allyelvis/pos-system#readme",
-  "devDependencies": {
-    "vite": "^6.0.7"
-  }
+  "homepage": "https://github.com/allyelvis/pos-system#readme"
 }
