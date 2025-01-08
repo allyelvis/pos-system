@@ -11,15 +11,22 @@ export default {
     sourcemap: true
   },
   plugins: [
-    vue(),
-    resolve(),
+    vue({
+      preprocessStyles: true
+    }),
+    resolve({
+      browser: true,
+      extensions: ['.vue', '.js']
+    }),
     commonjs(),
     terser()
   ],
   external: [
     'vue',
     'vue-router',
-    'axios',
-    'lodash'
-  ]
+    'axios'
+  ],
+  globals: {
+    vue: 'Vue'
+  }
 };
